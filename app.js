@@ -741,10 +741,11 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
       <span id="resumo" class="subtitulo" style="margin:0"></span>
     </div>
     <div id="forma-nova"></div>
-    <div id="lista"><div class="a-carregar">a carregar\u2026</div></div>`,e.querySelector("#filtro-estado").addEventListener("change",()=>Uo(e)),e.querySelector("#nova").addEventListener("click",()=>B3(e)),await Uo(e)}async function Uo(e){let r=e.querySelector("#lista"),i=e.querySelector("#filtro-estado").value,o=new Set([...r.querySelectorAll("tr.detalhe")].map(l=>l.dataset.de)),t=Ae.from("compras").select("id,estado,referencia_externa,total,data_encomenda,data_recepcao,notas,fornecedores(nome)").order("data_encomenda",{ascending:!1,nullsFirst:!1}).limit(300);i&&(t=t.eq("estado",i));let{data:n,error:s}=await t;if(s){r.innerHTML=`<p class="erro">${ge(s.message)}</p>`;return}if(!n.length){r.innerHTML='<div class="vazio">Nenhuma compra.</div>';return}let a=n.filter(l=>["encomendado","a_caminho"].includes(l.estado)).length;e.querySelector("#resumo").textContent=`${n.length} encomenda(s)`+(a?` \xB7 ${a} por receber`:""),r.innerHTML=`
+    <div id="lista"><div class="a-carregar">a carregar\u2026</div></div>`,e.querySelector("#filtro-estado").addEventListener("change",()=>Uo(e)),e.querySelector("#nova").addEventListener("click",()=>B3(e)),await Uo(e)}async function Uo(e){let r=e.querySelector("#lista"),i=e.querySelector("#filtro-estado").value,o=new Set([...r.querySelectorAll("tr.detalhe")].map(l=>l.dataset.de)),t=Ae.from("compras").select("id,estado,referencia_externa,referencia_fatura,total,data_encomenda,data_recepcao,notas,fornecedores(nome)").order("data_encomenda",{ascending:!1,nullsFirst:!1}).limit(300);i&&(t=t.eq("estado",i));let{data:n,error:s}=await t;if(s){r.innerHTML=`<p class="erro">${ge(s.message)}</p>`;return}if(!n.length){r.innerHTML='<div class="vazio">Nenhuma compra.</div>';return}let a=n.filter(l=>["encomendado","a_caminho"].includes(l.estado)).length;e.querySelector("#resumo").textContent=`${n.length} encomenda(s)`+(a?` \xB7 ${a} por receber`:""),r.innerHTML=`
     <div class="tabela-envolve"><table>
       <thead><tr>
-        <th></th><th>Data</th><th>Fornecedor</th><th>Refer\xEAncia</th>
+        <th></th><th>Data</th><th>Fornecedor</th>
+        <th>N\xBA encomenda</th><th>N\xBA factura</th>
         <th class="num">Total</th><th>Estado</th><th>Recebida em</th><th></th><th></th>
       </tr></thead>
       <tbody>${n.map(D3).join("")}</tbody>
@@ -753,7 +754,10 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
       <td><button class="accao abrir" data-id="${e.id}" title="Ver e editar os produtos">+</button></td>
       <td>${e.data_encomenda?new Date(e.data_encomenda).toLocaleDateString("pt-PT"):"\u2014"}</td>
       <td>${ge(e.fornecedores?.nome??"\u2014")}</td>
-      <td>${ge(e.referencia_externa??"\u2014")}</td>
+      <td><input type="text" class="ref" data-id="${e.id}" data-campo="referencia_externa"
+                 value="${ge(e.referencia_externa??"")}" placeholder="\u2014" style="width:9rem"></td>
+      <td><input type="text" class="ref" data-id="${e.id}" data-campo="referencia_fatura"
+                 value="${ge(e.referencia_fatura??"")}" placeholder="\u2014" style="width:9rem"></td>
       <td class="num">${it(e.total)}</td>
       <td>
         <select class="estado" data-id="${e.id}">
@@ -770,12 +774,12 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
                 title="Apagar esta encomenda">Apagar</button>
       </td>
       <td class="num"><span class="guardado" data-id="${e.id}"></span></td>
-    </tr>`}function z3(e,r){let i=async(o,t)=>{let n=r.querySelector(`.guardado[data-id="${o}"]`);n.textContent="\u2026";let{error:s}=await Ae.from("compras").update(t).eq("id",o);n.textContent=s?"\u2715":"\u2713",n.className=`guardado etiqueta ${s?"mau":"bom"}`,s&&alert("N\xE3o foi poss\xEDvel guardar: "+s.message),setTimeout(()=>{n.textContent="",n.className="guardado"},2500)};r.querySelectorAll("select.estado").forEach(o=>{o.addEventListener("change",()=>{let t={estado:o.value},n=r.querySelector(`input.recepcao[data-id="${o.dataset.id}"]`);o.value==="recebido"&&!n.value&&(n.value=new Date().toISOString().slice(0,10),t.data_recepcao=n.value),i(o.dataset.id,t)})}),r.querySelectorAll("input.recepcao").forEach(o=>{o.addEventListener("change",()=>i(o.dataset.id,{data_recepcao:o.value||null}))}),r.querySelectorAll("button.apagar").forEach(o=>{o.addEventListener("click",async()=>{let{data:t}=await Ae.from("compras_linhas").select("id",{count:"exact",head:!1}).eq("compra_id",o.dataset.id),n=t?.length??0,s=`Apagar a ${o.dataset.descricao}?`+(n?`
+    </tr>`}function z3(e,r){let i=async(o,t)=>{let n=r.querySelector(`.guardado[data-id="${o}"]`);n.textContent="\u2026";let{error:s}=await Ae.from("compras").update(t).eq("id",o);n.textContent=s?"\u2715":"\u2713",n.className=`guardado etiqueta ${s?"mau":"bom"}`,s&&alert("N\xE3o foi poss\xEDvel guardar: "+s.message),setTimeout(()=>{n.textContent="",n.className="guardado"},2500)};r.querySelectorAll("select.estado").forEach(o=>{o.addEventListener("change",()=>{let t={estado:o.value},n=r.querySelector(`input.recepcao[data-id="${o.dataset.id}"]`);o.value==="recebido"&&!n.value&&(n.value=new Date().toISOString().slice(0,10),t.data_recepcao=n.value),i(o.dataset.id,t)})}),r.querySelectorAll("input.ref").forEach(o=>{o.addEventListener("change",()=>i(o.dataset.id,{[o.dataset.campo]:o.value.trim()||null}))}),r.querySelectorAll("input.recepcao").forEach(o=>{o.addEventListener("change",()=>i(o.dataset.id,{data_recepcao:o.value||null}))}),r.querySelectorAll("button.apagar").forEach(o=>{o.addEventListener("click",async()=>{let{data:t}=await Ae.from("compras_linhas").select("id",{count:"exact",head:!1}).eq("compra_id",o.dataset.id),n=t?.length??0,s=`Apagar a ${o.dataset.descricao}?`+(n?`
 
 Leva consigo ${n} linha(s) de produto.`:"")+`
 
-Isto n\xE3o se pode desfazer.`;if(!confirm(s))return;o.disabled=!0;let{error:a}=await Ae.from("compras").delete().eq("id",o.dataset.id);if(a){alert("N\xE3o foi poss\xEDvel apagar: "+a.message),o.disabled=!1;return}await Uo(e)})}),r.querySelectorAll("button.abrir").forEach(o=>{o.addEventListener("click",async()=>{let t=o.dataset.id,n=r.querySelector(`tr.detalhe[data-de="${t}"]`);if(n){n.remove(),o.textContent="+";return}o.textContent="\u2212";let s=document.createElement("tr");s.className="detalhe",s.dataset.de=t,s.innerHTML='<td colspan="9"><div class="a-carregar">a carregar\u2026</div></td>',r.querySelector(`tr[data-compra="${t}"]`).after(s),await L3(e,s,t)})})}async function L3(e,r,i){let{data:o,error:t}=await Ae.from("compras_linhas").select("id,quantidade,preco_unitario,subtotal,ean,produtos(nome,marca)").eq("compra_id",i).order("subtotal",{ascending:!1});if(t){r.innerHTML=`<td colspan="9"><p class="erro">${ge(t.message)}</p></td>`;return}r.innerHTML=`
-    <td colspan="9" style="background:var(--fundo)">
+Isto n\xE3o se pode desfazer.`;if(!confirm(s))return;o.disabled=!0;let{error:a}=await Ae.from("compras").delete().eq("id",o.dataset.id);if(a){alert("N\xE3o foi poss\xEDvel apagar: "+a.message),o.disabled=!1;return}await Uo(e)})}),r.querySelectorAll("button.abrir").forEach(o=>{o.addEventListener("click",async()=>{let t=o.dataset.id,n=r.querySelector(`tr.detalhe[data-de="${t}"]`);if(n){n.remove(),o.textContent="+";return}o.textContent="\u2212";let s=document.createElement("tr");s.className="detalhe",s.dataset.de=t,s.innerHTML='<td colspan="9"><div class="a-carregar">a carregar\u2026</div></td>',r.querySelector(`tr[data-compra="${t}"]`).after(s),await L3(e,s,t)})})}async function L3(e,r,i){let{data:o,error:t}=await Ae.from("compras_linhas").select("id,quantidade,preco_unitario,subtotal,ean,produtos(nome,marca)").eq("compra_id",i).order("subtotal",{ascending:!1});if(t){r.innerHTML=`<td colspan="10"><p class="erro">${ge(t.message)}</p></td>`;return}r.innerHTML=`
+    <td colspan="10" style="background:var(--fundo)">
       <div class="procura-produto" data-compra="${i}">
         <div class="barra" style="margin:0.5rem 0">
           <input type="search" class="pp-termo" placeholder="Procurar produto por nome ou EAN\u2026"
@@ -840,7 +844,8 @@ Isto n\xE3o se pode desfazer.`;if(!confirm(s))return;o.disabled=!0;let{error:a}=
             <select id="c-estado">
               ${Object.entries(sm).filter(([o])=>o!=="rascunho").map(([o,t])=>`<option value="${o}" ${o==="recebido"?"selected":""}>${t}</option>`).join("")}
             </select>
-            <input type="text" id="c-ref" placeholder="n\xBA de encomenda (opcional)">
+            <input type="text" id="c-ref" placeholder="n\xBA de encomenda (opcional)" style="width:11rem">
+            <input type="text" id="c-fatura" placeholder="n\xBA de factura (opcional)" style="width:11rem">
             <button class="accao principal" type="submit">Criar</button>
           </div>
           <p class="subtitulo" style="margin:0">
@@ -848,7 +853,7 @@ Isto n\xE3o se pode desfazer.`;if(!confirm(s))return;o.disabled=!0;let{error:a}=
           </p>
         </form>
       </div>
-    </article>`,r.querySelector("#criar-compra").addEventListener("submit",async o=>{o.preventDefault();let t=r.querySelector("#c-estado").value,n=r.querySelector("#c-data").value,{error:s}=await Ae.from("compras").insert({fornecedor_id:Number(r.querySelector("#c-fornecedor").value),estado:t,data_encomenda:n,data_recepcao:t==="recebido"?n:null,referencia_externa:r.querySelector("#c-ref").value.trim()||null,notas:"Registada \xE0 m\xE3o"});if(s){alert("N\xE3o foi poss\xEDvel criar: "+s.message);return}r.innerHTML="",await Uo(e)})}var Fo=document.getElementById("raiz"),wy={analise:{titulo:"Oportunidades",desenhar:kv},cestos:{titulo:"Cestos",desenhar:Rv},compras:{titulo:"Compras",desenhar:_y},fornecedores:{titulo:"Fornecedores",desenhar:my},recolhas:{titulo:"Recolhas",desenhar:vy},registo:{titulo:"Registo",desenhar:yy},definicoes:{titulo:"Defini\xE7\xF5es",desenhar:Cv},utilizadores:{titulo:"Utilizadores",desenhar:V3,soAdmin:!0}},am="analise",Ui=null,xy=!1;async function Sy(){let{data:e}=await Ae.auth.getSession().catch(()=>({data:null}));if(Ui=e?.user??null,!Ui)return lm();let{error:r}=await Ae.from("fornecedores").select("id").limit(1);if(r)return q3(r);let i=await Ae.from("contas").select("id").limit(1);xy=!i.error&&(i.data?.length??0)>0,Ey()}function lm(e="",r=!1){Fo.innerHTML=`
+    </article>`,r.querySelector("#criar-compra").addEventListener("submit",async o=>{o.preventDefault();let t=r.querySelector("#c-estado").value,n=r.querySelector("#c-data").value,{error:s}=await Ae.from("compras").insert({fornecedor_id:Number(r.querySelector("#c-fornecedor").value),estado:t,data_encomenda:n,data_recepcao:t==="recebido"?n:null,referencia_externa:r.querySelector("#c-ref").value.trim()||null,referencia_fatura:r.querySelector("#c-fatura").value.trim()||null,notas:"Registada \xE0 m\xE3o"});if(s){alert("N\xE3o foi poss\xEDvel criar: "+s.message);return}r.innerHTML="",await Uo(e)})}var Fo=document.getElementById("raiz"),wy={analise:{titulo:"Oportunidades",desenhar:kv},cestos:{titulo:"Cestos",desenhar:Rv},compras:{titulo:"Compras",desenhar:_y},fornecedores:{titulo:"Fornecedores",desenhar:my},recolhas:{titulo:"Recolhas",desenhar:vy},registo:{titulo:"Registo",desenhar:yy},definicoes:{titulo:"Defini\xE7\xF5es",desenhar:Cv},utilizadores:{titulo:"Utilizadores",desenhar:V3,soAdmin:!0}},am="analise",Ui=null,xy=!1;async function Sy(){let{data:e}=await Ae.auth.getSession().catch(()=>({data:null}));if(Ui=e?.user??null,!Ui)return lm();let{error:r}=await Ae.from("fornecedores").select("id").limit(1);if(r)return q3(r);let i=await Ae.from("contas").select("id").limit(1);xy=!i.error&&(i.data?.length??0)>0,Ey()}function lm(e="",r=!1){Fo.innerHTML=`
     <form class="entrar" id="forma-entrar">
       <h1>LisbonGlam <span style="color:var(--destaque)">Compras</span></h1>
       ${r?`

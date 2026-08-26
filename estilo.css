@@ -155,3 +155,8 @@ td.produto { white-space: normal; min-width: 240px; max-width: 400px; }
 /* Tabelas dentro de cartões não precisam de moldura própria. */
 .cartao .tabela-envolve { border: 0; border-radius: 0; }
 .cartao .tabela-envolve th { background: transparent; }
+
+/* Encomendas já concluídas ficam esbatidas, para a atenção ir para as que
+   ainda estão a decorrer. */
+tr.concluida > td { background: var(--fundo); color: var(--tinta-suave); }
+tr.concluida:hover > td { color: var(--tinta); }

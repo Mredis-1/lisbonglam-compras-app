@@ -129,3 +129,29 @@ td.produto { white-space: normal; min-width: 240px; max-width: 400px; }
 .entrar button { width: 100%; margin-top: 1.25rem; }
 .erro { color: var(--mau); font-size: 0.85rem; margin-top: 0.75rem; }
 .vazio { padding: 3rem 1rem; text-align: center; color: var(--tinta-suave); }
+
+/* ---------- Filtro por marca ---------- */
+.marcas { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.marca-botao {
+  font: inherit; font-size: 0.8rem; cursor: pointer;
+  padding: 0.25rem 0.65rem; border-radius: 999px;
+  border: 1px solid var(--linha); background: var(--painel); color: var(--tinta-suave);
+}
+.marca-botao:hover { border-color: var(--destaque); color: var(--destaque); }
+.marca-botao.activa { background: var(--destaque); border-color: var(--destaque); color: #fff; font-weight: 600; }
+
+/* ---------- Juntar ao cesto ---------- */
+.juntar-celula { white-space: nowrap; }
+.juntar-celula input { margin-right: 0.3rem; }
+
+/* ---------- Definições ---------- */
+.definicao {
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  padding: 0.6rem 0; border-bottom: 1px solid var(--linha);
+}
+.definicao:last-child { border-bottom: 0; }
+.definicao .porque { margin-top: 0.1rem; }
+
+/* Tabelas dentro de cartões não precisam de moldura própria. */
+.cartao .tabela-envolve { border: 0; border-radius: 0; }
+.cartao .tabela-envolve th { background: transparent; }

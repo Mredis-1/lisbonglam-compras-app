@@ -1,0 +1,131 @@
+:root {
+  --tinta: #1a1a1c;
+  --tinta-suave: #6b6b73;
+  --fundo: #fbfbfc;
+  --painel: #ffffff;
+  --linha: #e6e6ea;
+  --destaque: #8b3a62;
+  --destaque-suave: #f7eef3;
+  --bom: #17734b;
+  --bom-fundo: #e9f5ef;
+  --aviso: #9a6414;
+  --aviso-fundo: #fdf3e2;
+  --mau: #a32d2d;
+  --raio: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tinta: #ececf0; --tinta-suave: #9b9ba6; --fundo: #131316; --painel: #1c1c21;
+    --linha: #2e2e36; --destaque: #d98cb3; --destaque-suave: #2a1d25;
+    --bom: #6fd3a4; --bom-fundo: #16281f; --aviso: #e0b060; --aviso-fundo: #2b2115;
+    --mau: #ef8b8b;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  color: var(--tinta);
+  background: var(--fundo);
+  -webkit-font-smoothing: antialiased;
+}
+
+.a-carregar { padding: 3rem; text-align: center; color: var(--tinta-suave); }
+
+/* ---------- Estrutura ---------- */
+header.topo {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 1.25rem;
+  padding: 0.7rem 1.25rem;
+  background: var(--painel);
+  border-bottom: 1px solid var(--linha);
+  flex-wrap: wrap;
+}
+.marca { font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
+.marca span { color: var(--destaque); }
+
+nav.menu { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+nav.menu button {
+  border: 0; background: none; cursor: pointer;
+  font: inherit; color: var(--tinta-suave);
+  padding: 0.35rem 0.7rem; border-radius: 999px;
+}
+nav.menu button:hover { background: var(--fundo); color: var(--tinta); }
+nav.menu button[aria-current="page"] { background: var(--destaque-suave); color: var(--destaque); font-weight: 600; }
+
+.utilizador { margin-left: auto; display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--tinta-suave); }
+
+main { padding: 1.25rem; max-width: 1400px; margin: 0 auto; }
+
+h1 { font-size: 1.35rem; margin: 0 0 0.25rem; letter-spacing: -0.02em; }
+.subtitulo { color: var(--tinta-suave); font-size: 0.9rem; margin: 0 0 1.25rem; }
+
+/* ---------- Controlos ---------- */
+.barra { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+
+input[type="search"], input[type="text"], input[type="email"], input[type="password"], input[type="number"], select {
+  font: inherit; color: var(--tinta);
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--linha); border-radius: var(--raio);
+  background: var(--painel);
+}
+input[type="search"] { min-width: 260px; flex: 1 1 260px; }
+input:focus, select:focus { outline: 2px solid var(--destaque); outline-offset: -1px; }
+
+button.accao {
+  font: inherit; font-weight: 550; cursor: pointer;
+  padding: 0.5rem 0.9rem; border-radius: var(--raio);
+  border: 1px solid var(--linha); background: var(--painel); color: var(--tinta);
+}
+button.accao:hover { border-color: var(--destaque); color: var(--destaque); }
+button.accao.principal { background: var(--destaque); border-color: var(--destaque); color: #fff; }
+button.accao.principal:hover { filter: brightness(1.1); color: #fff; }
+button.accao:disabled { opacity: 0.5; cursor: default; }
+
+/* ---------- Tabelas ---------- */
+.tabela-envolve { overflow-x: auto; background: var(--painel); border: 1px solid var(--linha); border-radius: var(--raio); }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+th, td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--linha); white-space: nowrap; }
+th { font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--tinta-suave); background: var(--fundo); position: sticky; top: 0; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: var(--fundo); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.produto { white-space: normal; min-width: 240px; max-width: 400px; }
+
+.marca-produto { display: block; font-size: 0.75rem; color: var(--tinta-suave); text-transform: uppercase; letter-spacing: 0.03em; }
+
+/* ---------- Etiquetas ---------- */
+.etiqueta { display: inline-block; padding: 0.1rem 0.45rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+.etiqueta.bom { background: var(--bom-fundo); color: var(--bom); }
+.etiqueta.medio { background: var(--aviso-fundo); color: var(--aviso); }
+.etiqueta.mau { color: var(--mau); }
+.esgotado { color: var(--mau); font-weight: 600; }
+
+.porque { display: block; font-size: 0.78rem; color: var(--tinta-suave); white-space: normal; margin-top: 0.15rem; }
+
+/* ---------- Cartões ---------- */
+.cartoes { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+.cartao { background: var(--painel); border: 1px solid var(--linha); border-radius: var(--raio); overflow: hidden; }
+.cartao > header { padding: 0.8rem 1rem; border-bottom: 1px solid var(--linha); display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
+.cartao h3 { margin: 0; font-size: 0.95rem; }
+.cartao .corpo { padding: 0.5rem 1rem 1rem; }
+.cartao .rodape { padding: 0.7rem 1rem; border-top: 1px solid var(--linha); background: var(--fundo); display: flex; gap: 0.5rem; justify-content: flex-end; }
+
+.medida { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 0.2rem 0; }
+.medida span:first-child { color: var(--tinta-suave); }
+
+.progresso { height: 6px; background: var(--linha); border-radius: 999px; overflow: hidden; margin: 0.5rem 0 0.75rem; }
+.progresso > div { height: 100%; background: var(--bom); }
+.progresso.incompleto > div { background: var(--aviso); }
+
+/* ---------- Entrar ---------- */
+.entrar { max-width: 380px; margin: 12vh auto; padding: 2rem; background: var(--painel); border: 1px solid var(--linha); border-radius: var(--raio); }
+.entrar h1 { text-align: center; margin-bottom: 1.5rem; }
+.entrar label { display: block; font-size: 0.85rem; color: var(--tinta-suave); margin: 0.75rem 0 0.25rem; }
+.entrar input { width: 100%; }
+.entrar button { width: 100%; margin-top: 1.25rem; }
+.erro { color: var(--mau); font-size: 0.85rem; margin-top: 0.75rem; }
+.vazio { padding: 3rem 1rem; text-align: center; color: var(--tinta-suave); }

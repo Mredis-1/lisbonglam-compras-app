@@ -362,7 +362,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
         <div class="tabela-envolve" style="margin-top:0.75rem">
           <table>
             <thead><tr>
-              <th>Produto</th><th class="num">Na loja</th><th class="num">Qtd</th>
+              <th>Produto</th><th>EAN</th><th class="num">Na loja</th><th class="num">Qtd</th>
               <th class="num">Pre\xE7o</th><th class="num">Subtotal</th><th class="num">Margem</th><th></th>
             </tr></thead>
             <tbody>${e.linhas.map(a=>`
@@ -371,6 +371,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
                   ${a.produtos?.marca?`<span class="marca-produto">${ge(a.produtos.marca)}</span>`:""}
                   ${ge(a.produtos?.nome??a.ean)}
                 </td>
+                <td class="ean">${ge(a.ean)}</td>
                 <td class="num">${i6(a)}</td>
                 <td class="num">
                   <input type="number" class="qtd-linha" data-linha="${a.id}" data-cesto="${e.id}"
@@ -410,13 +411,14 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 
         <div class="detalhe-sugestao" data-i="${r}" style="display:none;margin-top:0.75rem">
           <div class="tabela-envolve"><table>
-            <thead><tr><th>Produto</th><th class="num">Na loja</th><th class="num">Qtd</th><th class="num">Pre\xE7o</th><th class="num">Margem</th></tr></thead>
+            <thead><tr><th>Produto</th><th>EAN</th><th class="num">Na loja</th><th class="num">Qtd</th><th class="num">Pre\xE7o</th><th class="num">Margem</th></tr></thead>
             <tbody>${e.linhas.map(o=>`
               <tr>
                 <td class="produto">
                   ${o.marca?`<span class="marca-produto">${ge(o.marca)}</span>`:""}
                   ${ge(o.produto)}
                 </td>
+                <td class="ean">${ge(o.ean)}</td>
                 <td class="num">${o.stock_loja===0?'<span class="esgotado">0</span>':ot(o.stock_loja)}</td>
                 <td class="num">${ot(o.quantidade)}</td>
                 <td class="num">${it(o.preco)}</td>

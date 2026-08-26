@@ -160,3 +160,11 @@ td.produto { white-space: normal; min-width: 240px; max-width: 400px; }
    ainda estão a decorrer. */
 tr.concluida > td { background: var(--fundo); color: var(--tinta-suave); }
 tr.concluida:hover > td { color: var(--tinta); }
+
+/* EAN: números longos que se lêem melhor alinhados e em largura fixa. */
+td.ean {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85em;
+  color: var(--texto-suave, #666);
+  white-space: nowrap;
+}

@@ -523,8 +523,6 @@ N\xE3o fecha a compra: fica no carrinho para a confirmar no site deles.`)&&(i.di
             </select>
             <input type="number" id="f-minimo" placeholder="m\xEDnimo \u20AC" step="0.01" min="0" style="width:8rem">
             <input type="number" id="f-min-un" placeholder="m\xEDn. un./ref." step="1" min="0" style="width:9rem">
-            <input type="number" id="f-horas" placeholder="horas" step="1" min="1" value="24" style="width:6rem"
-                   title="De quantas em quantas horas se vai buscar os dados">
             <button class="accao principal" type="submit">Criar</button>
           </div>
           <p class="subtitulo" style="margin:0">
@@ -532,11 +530,14 @@ N\xE3o fecha a compra: fica no carrinho para a confirmar no site deles.`)&&(i.di
           </p>
         </form>
       </div>
-    </article>`,r.querySelector("#criar").addEventListener("submit",async i=>{i.preventDefault();let o=r.querySelector("#f-nome").value.trim();if(!o)return;let t=o.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),{error:n}=await Ae.from("fornecedores").insert({slug:t,nome:o,origem:r.querySelector("#f-origem").value,minimo_valor:r.querySelector("#f-minimo").value||null,minimo_unidades:r.querySelector("#f-min-un").value||null,frequencia_horas:Number(r.querySelector("#f-horas").value)||24});if(n){alert("N\xE3o foi poss\xEDvel criar: "+n.message);return}r.innerHTML="",await om(e)})}async function om(e){let r=e.querySelector("#lista"),{data:i,error:o}=await Ae.from("fornecedores").select("id,nome,slug,origem,minimo_valor,minimo_unidades,frequencia_horas,ultima_recolha,activo,precos_com_iva,stock_sempre_disponivel,notas,config,automacao").is("fornecedor_pai_id",null).neq("slug","loja").order("nome");if(o){r.innerHTML=`<p class="erro">${ge(o.message)}</p>`;return}let{data:t}=await Ae.from("ofertas").select("fornecedor_id").limit(1e5),n={};for(let a of t??[])n[a.fornecedor_id]=(n[a.fornecedor_id]??0)+1;r.innerHTML=`
+    </article>`,r.querySelector("#criar").addEventListener("submit",async i=>{i.preventDefault();let o=r.querySelector("#f-nome").value.trim();if(!o)return;let t=o.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),{error:n}=await Ae.from("fornecedores").insert({slug:t,nome:o,origem:r.querySelector("#f-origem").value,minimo_valor:r.querySelector("#f-minimo").value||null,minimo_unidades:r.querySelector("#f-min-un").value||null,frequencia_horas:24});if(n){alert("N\xE3o foi poss\xEDvel criar: "+n.message);return}r.innerHTML="",await om(e)})}async function om(e){let r=e.querySelector("#lista"),{data:i,error:o}=await Ae.from("fornecedores").select("id,nome,slug,origem,minimo_valor,minimo_unidades,frequencia_horas,ultima_recolha,activo,precos_com_iva,stock_sempre_disponivel,notas,config,automacao").is("fornecedor_pai_id",null).neq("slug","loja").order("nome");if(o){r.innerHTML=`<p class="erro">${ge(o.message)}</p>`;return}let{data:t}=await Ae.from("ofertas").select("fornecedor_id").limit(1e5),n={};for(let a of t??[])n[a.fornecedor_id]=(n[a.fornecedor_id]??0)+1;r.innerHTML=`
     <div class="tabela-envolve"><table>
+      <!-- A frequ\xEAncia de recolha vive no ecr\xE3 das Recolhas, que a explica por
+           palavras ("todos os dias") em vez de um n\xFAmero de horas. Estava nos
+           dois s\xEDtios e s\xF3 dava para enganar quem l\xE1 mexesse. -->
       <thead><tr>
         <th>Fornecedor</th><th>Origem</th>
-        <th class="num">M\xEDnimo \u20AC</th><th class="num">M\xEDn. un.</th><th class="num">Horas</th>
+        <th class="num">M\xEDnimo \u20AC</th><th class="num">M\xEDn. un.</th>
         <th class="num">Ofertas</th><th>\xDAltima recolha</th>
         <th>c/ IVA</th><th>Stock sempre</th><th>Activo</th><th></th><th></th>
       </tr></thead>
@@ -548,8 +549,6 @@ N\xE3o fecha a compra: fica no carrinho para a confirmar no site deles.`)&&(i.di
                  data-id="${a.id}" data-campo="minimo_valor" value="${a.minimo_valor??""}"></td>
           <td class="num"><input type="number" step="1" min="0" style="width:5rem"
                  data-id="${a.id}" data-campo="minimo_unidades" value="${a.minimo_unidades??""}"></td>
-          <td class="num"><input type="number" step="1" min="1" style="width:5rem"
-                 data-id="${a.id}" data-campo="frequencia_horas" value="${a.frequencia_horas??""}"></td>
           <td class="num">${ot(n[a.id]??0)}</td>
           <td>${a.ultima_recolha?new Date(a.ultima_recolha).toLocaleDateString("pt-PT"):"nunca"}</td>
           <td><input type="checkbox" data-id="${a.id}" data-campo="precos_com_iva" ${a.precos_com_iva?"checked":""}
@@ -561,7 +560,7 @@ N\xE3o fecha a compra: fica no carrinho para a confirmar no site deles.`)&&(i.di
           <td class="num"><span class="guardado" data-id="${a.id}"></span></td>
         </tr>
         <tr class="painel" data-de="${a.id}" style="display:none">
-          <td colspan="12" style="background:var(--fundo)"></td>
+          <td colspan="11" style="background:var(--fundo)"></td>
         </tr>`).join("")}</tbody>
     </table></div>`;let s=async(a,l,d)=>{let u=r.querySelector(`.guardado[data-id="${a}"]`);u.textContent="\u2026";let{error:c}=await Ae.from("fornecedores").update({[l]:d}).eq("id",a);_n(u,c)};r.querySelectorAll('input[type="number"][data-campo]').forEach(a=>{a.addEventListener("change",()=>s(a.dataset.id,a.dataset.campo,a.value===""?null:Number(a.value)))}),r.querySelectorAll('input[type="checkbox"][data-campo]').forEach(a=>{a.addEventListener("change",()=>s(a.dataset.id,a.dataset.campo,a.checked))}),r.querySelectorAll("button.gerir").forEach(a=>{a.addEventListener("click",()=>{let l=r.querySelector(`tr.painel[data-de="${a.dataset.id}"]`),d=l.style.display!=="none";l.style.display=d?"none":"",a.textContent=d?"Cat\xE1logo\u2026":"Fechar",d||S3(l.querySelector("td"),Number(a.dataset.id),a.dataset.nome)})})}async function S3(e,r,i){let{data:o}=await Ae.from("fornecedor_credenciais").select("url_entrada,utilizador,actualizado_em").eq("fornecedor_id",r).maybeSingle();e.innerHTML=`
     <div style="padding:0.5rem 0">

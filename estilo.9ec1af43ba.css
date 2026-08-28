@@ -168,3 +168,23 @@ td.ean {
   color: var(--texto-suave, #666);
   white-space: nowrap;
 }
+
+/* Calendário das recolhas: dias e horas como botões que se acendem. */
+tr.calendario td { padding-top: 0; border-top: 0; }
+.marcacoes { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; }
+.marcacoes .rotulo {
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--tinta-suave); margin-right: 0.25rem;
+}
+.marcacoes .rotulo:not(:first-child) { margin-left: 0.9rem; }
+.marca {
+  border: 1px solid var(--linha); background: var(--fundo);
+  color: var(--tinta-suave); border-radius: 0.35rem;
+  padding: 0.15rem 0.45rem; font-size: 0.78rem; cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.marca.hora { padding: 0.15rem 0.3rem; }
+.marca:hover { border-color: var(--destaque); }
+.marca.ligada {
+  background: var(--destaque); border-color: var(--destaque); color: #fff;
+}

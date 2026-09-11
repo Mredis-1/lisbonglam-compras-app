@@ -44,8 +44,8 @@ header.topo {
   border-bottom: 1px solid var(--linha);
   flex-wrap: wrap;
 }
-.marca { font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
-.marca span { color: var(--destaque); }
+.logotipo { font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
+.logotipo span { color: var(--destaque); }
 
 nav.menu { display: flex; gap: 0.25rem; flex-wrap: wrap; }
 nav.menu button {
@@ -188,3 +188,23 @@ tr.calendario td { padding-top: 0; border-top: 0; }
 .marca.ligada {
   background: var(--destaque); border-color: var(--destaque); color: #fff;
 }
+
+/* Aviso no topo quando a recolha automática deixou de acordar. */
+.alerta {
+  margin: 0; padding: 0.6rem 1.25rem;
+  background: var(--mau); color: #fff; font-size: 0.9rem;
+}
+.alerta strong { color: #fff; }
+
+/* Quem só pode ver não vê os comandos que alteram dados: a base de dados ia
+   recusá-los de qualquer forma. Os campos ficam só para leitura. */
+body.so-ver .escrita { display: none !important; }
+body.so-ver input.editavel, body.so-ver select.editavel, body.so-ver button.marca {
+  pointer-events: none; background: transparent; border-color: transparent;
+}
+body.nao-admin .so-admin { display: none !important; }
+
+/* Marcas pequenas nas linhas dos cestos. */
+.noutro-cesto { color: var(--aviso); }
+.lote-grande { color: var(--mau); }
+

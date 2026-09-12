@@ -139,6 +139,16 @@ td.produto { white-space: normal; min-width: 240px; max-width: 400px; }
 }
 .marca-botao:hover { border-color: var(--destaque); color: var(--destaque); }
 .marca-botao.activa { background: var(--destaque); border-color: var(--destaque); color: #fff; font-weight: 600; }
+.marca-botao.excluida { border-color: var(--mau); color: var(--mau); text-decoration: line-through; }
+.segmentos { display: inline-flex; border: 1px solid var(--linha); border-radius: var(--raio); overflow: hidden; }
+.segmentos button {
+  font: inherit; font-size: 0.8rem; cursor: pointer; padding: 0.25rem 0.7rem;
+  border: 0; background: var(--painel); color: var(--tinta-suave);
+}
+.segmentos button + button { border-left: 1px solid var(--linha); }
+.segmentos button.activo { background: var(--destaque-suave); color: var(--destaque); font-weight: 600; }
+#mc-marcas .marcas, #pd-marcas .marcas { margin-bottom: 0.4rem; }
+.filtro-resumo { color: var(--tinta); margin-bottom: 1rem; }
 
 /* ---------- Juntar ao cesto ---------- */
 .juntar-celula { white-space: nowrap; }
